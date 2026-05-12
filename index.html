@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A modern Pomodoro timer with focus sessions, breaks, task tracking, keyboard shortcuts, and local storage."
+    />
+    <title>Pomodoro Timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Pomodoro Timer home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>
+            <strong>Pomodoro</strong>
+            <small>Focus Timer</small>
+          </span>
+        </a>
+
+        <div class="topbar-actions">
+          <button class="icon-button" id="focusModeBtn" type="button" aria-label="Toggle fullscreen focus mode">
+            <span aria-hidden="true">[]</span>
+          </button>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light mode">
+            <span class="toggle-track" aria-hidden="true">
+              <span class="toggle-thumb"></span>
+            </span>
+            <span class="theme-label">Dark</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section class="hero-panel glass-panel" aria-labelledby="timerHeading">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Deep work session</p>
+              <h1 id="timerHeading">Build momentum, one interval at a time.</h1>
+            </div>
+            <div class="session-pill" aria-label="Completed Pomodoro sessions">
+              <span id="sessionCount">0</span>
+              <small>completed</small>
+            </div>
+          </div>
+
+          <div class="mode-tabs" role="tablist" aria-label="Timer modes">
+            <button class="mode-btn active" type="button" data-mode="pomodoro" role="tab" aria-selected="true">
+              Pomodoro
+            </button>
+            <button class="mode-btn" type="button" data-mode="shortBreak" role="tab" aria-selected="false">
+              Short Break
+            </button>
+            <button class="mode-btn" type="button" data-mode="longBreak" role="tab" aria-selected="false">
+              Long Break
+            </button>
+          </div>
+
+          <div class="timer-stage">
+            <div class="progress-wrap" aria-label="Timer progress">
+              <svg class="progress-ring" viewBox="0 0 240 240" role="img" aria-labelledby="progressTitle">
+                <title id="progressTitle">Circular Pomodoro timer progress</title>
+                <circle class="progress-ring-bg" cx="120" cy="120" r="102"></circle>
+                <circle class="progress-ring-fill" id="progressRing" cx="120" cy="120" r="102"></circle>
+              </svg>
+              <div class="timer-face">
+                <span class="mode-label" id="currentModeLabel">Pomodoro</span>
+                <time id="timeDisplay" datetime="PT25M">25:00</time>
+                <span class="status-text" id="statusText">Ready to focus</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row" aria-label="Timer controls">
+            <button class="primary-btn" id="startPauseBtn" type="button">Start</button>
+            <button class="secondary-btn" id="resetBtn" type="button">Reset</button>
+          </div>
+
+          <p class="shortcut-hint">
+            <kbd>Space</kbd> start or pause
+            <span aria-hidden="true">/</span>
+            <kbd>R</kbd> reset
+          </p>
+
+          <blockquote class="quote-card" id="quoteText">
+            Focus is the art of choosing what gets your best attention.
+          </blockquote>
+        </section>
+
+        <aside class="side-grid" aria-label="Pomodoro settings and tasks">
+          <section class="glass-panel settings-card" aria-labelledby="settingsHeading">
+            <div class="section-heading">
+              <p class="eyebrow">Customize</p>
+              <h2 id="settingsHeading">Durations</h2>
+            </div>
+
+            <form class="duration-form" id="durationForm">
+              <label>
+                <span>Pomodoro</span>
+                <input id="pomodoroInput" type="number" min="1" max="120" value="25" />
+              </label>
+              <label>
+                <span>Short break</span>
+                <input id="shortBreakInput" type="number" min="1" max="60" value="5" />
+              </label>
+              <label>
+                <span>Long break</span>
+                <input id="longBreakInput" type="number" min="1" max="90" value="15" />
+              </label>
+              <button class="secondary-btn full-width" type="submit">Apply durations</button>
+            </form>
+          </section>
+
+          <section class="glass-panel stats-card" aria-labelledby="statsHeading">
+            <div class="section-heading">
+              <p class="eyebrow">Today</p>
+              <h2 id="statsHeading">Progress</h2>
+            </div>
+            <div class="stats-grid">
+              <div>
+                <span id="focusMinutes">0</span>
+                <small>focus minutes</small>
+              </div>
+              <div>
+                <span id="cycleCount">0</span>
+                <small>cycles</small>
+              </div>
+            </div>
+          </section>
+
+          <section class="glass-panel task-card" aria-labelledby="taskHeading">
+            <div class="section-heading task-heading">
+              <div>
+                <p class="eyebrow">Plan</p>
+                <h2 id="taskHeading">Tasks</h2>
+              </div>
+              <button class="text-button" id="clearTasksBtn" type="button">Clear done</button>
+            </div>
+
+            <form class="task-form" id="taskForm">
+              <input id="taskInput" type="text" maxlength="80" placeholder="Add a focus task..." />
+              <button class="add-task-btn" type="submit" aria-label="Add task">+</button>
+            </form>
+
+            <ul class="task-list" id="taskList" aria-live="polite"></ul>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
