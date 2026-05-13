@@ -28,16 +28,6 @@ A modern, responsive Pomodoro Timer web application built with HTML, CSS, and va
 - Web Audio API
 - Local Storage API
 
-## Screenshots
-
-Add screenshots of the app here after running it locally.
-
-```text
-screenshots/
-  desktop.png
-  mobile.png
-```
-
 ## How To Run
 
 1. Clone or download this repository.
